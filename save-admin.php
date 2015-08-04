@@ -15,6 +15,7 @@ require_once ('auth.php');
 	<body>
 
 		<?php
+		try{
 		//store the post inputs in variables
 		$first_name = test_input($_POST['first_name']);
 		$last_name = test_input($_POST['last_name']);
@@ -89,14 +90,14 @@ require_once ('auth.php');
 			}
 
 			//execute the insert
-			$cmd -> execute();
+			$cmd -> execute();			
 
 			//disconnect
 			$conn = null;
 
 			//send email to user
 			if (empty($admin_id)) {
-				mail($email, 'Admin Registration Confirmation', 'Hello ' . $first_name . ', This email is to confirm that you have been successfully added as new admin of Super Cars. Following terms and policies, you can add, delete and update pages and/or images. You can even add new admins or delete existing. Thank you for joining the team!');
+				mail($email, 'Admin Registration Confirmation', 'Hello ' . $first_name . ', This email is to confirm that you have been successfully added as new admin of Cars. Following terms and policies, you can add, delete and update pages and/or images. You can even add new admins or delete existing. Thank you for joining the team!');
 
 				//show confirmation message
 				echo '<h1>Hello <b>' . $first_name . '</b>,</h1>
@@ -106,6 +107,14 @@ require_once ('auth.php');
 		A confirmation email has been sent to <a href="mailto:' . $email . '">' . $email . '</a> . Click <a href="login.php">here</a> to login.</h2>';
 			}
 		}
+		}catch (exception $e) {
+		//mail ourselves the error
+		mail('200303856@student.georgianc.on.ca', 'Errors encountered', $e);
+	
+		//redirect to the error page
+		header('location:error.php');
+	}
+
 
 		//add function to escape special characters input by the user
 		function test_input($data) {
