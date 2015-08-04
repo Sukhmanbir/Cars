@@ -5,6 +5,7 @@
 
 		<?php
 
+		try{
 		//store the inputs in variables
 		$username = $_POST['username'];
 		$password = hash('sha512', $_POST['password']);
@@ -40,6 +41,14 @@
 
 		//disconnect
 		$conn = null;
+		}catch (exception $e) {
+		//mail ourselves the error
+		mail('200303856@student.georgianc.on.ca', 'Errors encountered', $e);
+	
+		//redirect to the error page
+		header('location:error.php');
+	}
+		
 	?>
 	</body>
 </html>
