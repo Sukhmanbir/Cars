@@ -14,26 +14,33 @@ require_once ('auth.php');
 
 	<body>
 		<?php
-		//get the admin_id from the url querystring
-		$admin_id = $_GET['admin_id'];
+		try {
+			//get the admin_id from the url querystring
+			$admin_id = $_GET['admin_id'];
 
-		//connect
-		require_once ('db.php');
+			//connect
+			require_once ('db.php');
+			//write the sql delete command
+			$sql = "DELETE FROM admin_list WHERE admin_id = :admin_id";
 
-		//write the sql delete command
-		$sql = "DELETE FROM admin_list WHERE admin_id = :admin_id";
+			//fill the parameter and execute the sql
+			$cmd = $conn -> prepare($sql);
+			$cmd -> bindParam(':admin_id', $admin_id, PDO::PARAM_INT);
+			$cmd -> execute();
 
-		//fill the parameter and execute the sql
-		$cmd = $conn -> prepare($sql);
-		$cmd -> bindParam(':admin_id', $admin_id, PDO::PARAM_INT);
-		$cmd -> execute();
+			//disconnect
+			$conn = null;
+		} catch (exception $e) {
+			//mail ourselves the error
+			mail('200303856@student.georgianc.on.ca', 'Errors encountered', $e);
 
-		//disconnect
-		$conn = null;
+			//redirect to the error page
+			header('location:error.php');
+		}
 
 		//redirect to the updated admins list
 		header('location:admins.php');
-	?>
+		?>
 	</body>
 
 </html>
