@@ -7,8 +7,10 @@ require_once ('auth.php');
 $title = 'Admin Details';
 require_once ('header.php');
 
+try{
 //check if we have a admin id in the querystring
-if (!empty($_GET['admin_id'])) {
+if (!empty($_GET['admin_id'])) 
+	{
 
 	//if there is admin id, store in a variable
 	$admin_id = $_GET['admin_id'];
@@ -34,6 +36,14 @@ if (!empty($_GET['admin_id'])) {
 	//disconnect
 	$conn = null;
 }
+}catch (exception $e) {
+	//mail ourselves the error
+	mail('200303856@student.georgianc.on.ca', 'Errors encountered', $e);
+
+	//redirect to the error page
+	header('location:error.php');
+}
+
 ?>
 
 <div class="container">
@@ -62,7 +72,9 @@ if (!empty($_GET['admin_id'])) {
 		</div>
 	</form>
 </div>
+
 <?php
+
 //link to footer
 require_once ('footer.php');
 ob_flush();
