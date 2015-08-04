@@ -8,6 +8,7 @@
 
 	<body>
 		<?php
+		try{
 		//store inputs in variables
 		$username = test_input($_POST['username']);
 		$password = test_input($_POST['password']);
@@ -69,6 +70,13 @@
 		<br />
 		Click <a href="login.php">here</a> to login.</h2>';
 		}
+		}catch (exception $e) {
+		//mail ourselves the error
+		mail('200303856@student.georgianc.on.ca', 'Errors encountered', $e);
+	
+		//redirect to the error page
+		header('location:error.php');
+	}
 
 		//add function to escape special characters input by the user
 		function test_input($data) {
